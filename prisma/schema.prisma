@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  user
+}
+
+type FcmToken {
+  web     String?
+  android String?
+  ios     String?
+}
+
+model User {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  email      String    @unique
+  password   String
+  avatar     String?
+  avatarPath String?
+  role       Role      @default(user)
+  isBlocked  Boolean   @default(false)
+  isVerified Boolean   @default(false)
+  fcmToken   FcmToken?
+  lastLogin  DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model CHAT_DATA {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  period String
+  type   String
+  year   Int
+  sales  Int
+  orders Int
+}
